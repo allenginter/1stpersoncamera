@@ -33,13 +33,18 @@ endEvent
 event OnOptionSliderAccept(int option, float value)
     if (option == iHeightSliderID)
         fCurrentHeight = value
-        ; FIXED: Removed "{1}" to match the required 2 arguments
         SetSliderValue(option, fCurrentHeight)
         UpdateCamera()
     endif
 endEvent
 
 function UpdateCamera()
-    ; FIXED: Ensured 'Game.' prefix is used for the global setting
     Game.SetGameSettingFloat("fFirstPersonCameraHeight", fCurrentHeight)
 endFunction
+
+event OnConfigClose()
+    ; This forces the game to reload camera settings
+    Game.ForceThirdPerson()
+    Utility.Wait(0.1)
+    Game.ForceFirstPerson()
+endEvent
